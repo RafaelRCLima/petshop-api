@@ -17,7 +17,8 @@ model Service {
   furSize      String
   race         String
   furIsTangled Boolean
-  duration     Int
+  startTime    DateTime
+  endTime      DateTime
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
