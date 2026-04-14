@@ -1,11 +1,8 @@
 import { Router, type Request, type Response } from 'express';
+import createAppointmentController from './app/controllers/create-appointment-controller.js';
 
 const routes = Router();
 
-const test = (value: string): string => value;
-
-routes.get('/', (req: Request, res: Response) => {
-  res.send('Working!');
-});
+routes.post('/create-appointment', createAppointmentController);
 
 export default routes;
