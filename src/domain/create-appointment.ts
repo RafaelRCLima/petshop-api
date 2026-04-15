@@ -1,21 +1,10 @@
 import db from '../lib/db.js';
+import type { AppointmentRepository } from './appointment-repository.js';
 import type { AppointmentCreation } from './appointment-types.js';
 
-export default async (service: AppointmentCreation) => {
-  const {
-    animalType,
-    description,
-    endTime,
-    furIsTangled,
-    furSize,
-    name,
-    race,
-    size,
-    startTime
-  } = service;
-
-  return await db.service.create({
-    data: {
+const createAppointmentRepository: AppointmentRepository = {
+  async create(appointment: AppointmentCreation): Promise<any> {
+    const {
       animalType,
       description,
       endTime,
@@ -24,9 +13,27 @@ export default async (service: AppointmentCreation) => {
       name,
       race,
       size,
-      startTime,
-      updatedAt: new Date(),
-      createdAt: new Date()
-    }
-  });
+      startTime
+    } = appointment;
+
+    const result = await db.service.create({
+      data: {
+        animalType,
+        description,
+        endTime,
+        furIsTangled,
+        furSize,
+        name,
+        race,
+        size,
+        startTime,
+        updatedAt: new Date(),
+        createdAt: new Date()
+      }
+    });
+
+    return result;
+  }
 };
+
+export default createAppointmentRepository;

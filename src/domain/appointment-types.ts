@@ -16,4 +16,6 @@ export type AppointmentCreation = {
   race: string;
   size: PetSize;
   startTime: Date;
+  updatedAt?: Date;
+  createdAt?: Date;
 };

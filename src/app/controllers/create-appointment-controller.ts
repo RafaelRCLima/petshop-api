@@ -1,11 +1,16 @@
 import { type Request, type Response } from 'express';
 import { z } from 'zod';
-import createAppointmentService from '../services/create-appointment-service.js';
+import createAppointmentRepository from '../../domain/create-appointment.js';
 import {
   animalTypes,
   furSizes,
   petSizes
 } from '../../domain/appointment-types.js';
+import { CreateAppointmentService } from '../services/index.js';
+
+const createAppointmentService = CreateAppointmentService(
+  createAppointmentRepository
+);
 
 const createAppointmentSchema = z
   .object({

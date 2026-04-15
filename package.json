@@ -11,12 +11,14 @@
     "dev": "tsx watch --env-file .env ./src/app.ts",
     "debug": "tsx --env-file .env --inspect-brk ./src/app.ts",
     "lint": "eslint . --ext .ts",
-    "test": "jest --runInBand --detectOpenHandles"
+    "pretest": "dotenv -e .env.test -- prisma migrate deploy",
+    "test": "dotenv -e .env.test -- node --experimental-vm-modules ./node_modules/jest/bin/jest.js --runInBand --detectOpenHandles"
   },
   "dependencies": {
     "@prisma/adapter-pg": "^7.7.0",
     "@prisma/client": "^7",
     "@types/node": "^24.5.2",
+    "dotenv-cli": "^11.0.0",
     "eslint": "^9.36.0",
     "express": "^5.1.0",
     "nvm": "^0.0.4",
@@ -36,6 +38,7 @@
     "jiti": "^2.6.0",
     "prisma": "^7",
     "sucrase": "^3.35.0",
+    "ts-jest": "^29.4.9",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1"

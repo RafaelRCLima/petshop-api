@@ -1,4 +1,4 @@
-import createAppointment from '../../domain/create-appointment.js';
+import type { AppointmentRepository } from '../../domain/appointment-repository.js';
 import type { AppointmentCreation } from '../../domain/appointment-types.js';
 import logger from '../../lib/logger.js';
 
@@ -12,20 +12,23 @@ const formatDate = (date: Date): string => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
-export default async (appointment: AppointmentCreation) => {
-  logger.info(
-    `Creating appointment with data: ${JSON.stringify({
-      animalType: appointment.animalType,
-      description: appointment.description,
-      endTime: formatDate(appointment.endTime),
-      furIsTangled: appointment.furIsTangled,
-      furSize: appointment.furSize,
-      name: appointment.name,
-      race: appointment.race,
-      size: appointment.size,
-      startTime: formatDate(appointment.startTime)
-    })}`
-  );
+export default (repository: AppointmentRepository) =>
+  async (appointment: AppointmentCreation) => {
+    logger.info(
+      `Creating appointment with data: ${JSON.stringify({
+        animalType: appointment.animalType,
+        description: appointment.description,
+        endTime: formatDate(appointment.endTime),
+        furIsTangled: appointment.furIsTangled,
+        furSize: appointment.furSize,
+        name: appointment.name,
+        race: appointment.race,
+        size: appointment.size,
+        startTime: formatDate(appointment.startTime)
+      })}`
+    );
 
-  await createAppointment(appointment);
-};
+    const createdAppointment = await repository.create(appointment);
+
+    return createdAppointment;
+  };
