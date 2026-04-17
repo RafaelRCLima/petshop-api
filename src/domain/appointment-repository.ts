@@ -1,5 +1,9 @@
-import type { AppointmentCreation } from './appointment-types.js';
+import type { AppointmentCreationType } from './appointment-types.js';
 
 export interface AppointmentRepository {
-  create(appointment: AppointmentCreation): Promise<AppointmentCreation>;
+  create(
+    appointment: AppointmentCreationType
+  ): Promise<AppointmentCreationType>;
+
+  findByStartTime(startTime: Date): Promise<AppointmentCreationType[]>;
 }

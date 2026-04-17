@@ -12,25 +12,19 @@ const createAppointmentService = CreateAppointmentService(
   createAppointmentRepository
 );
 
-const createAppointmentSchema = z
-  .object({
-    animalType: z.string().trim().toUpperCase().pipe(z.enum(animalTypes)),
-    description: z.string().trim().min(1),
-    endTime: z.coerce.date(),
-    furIsTangled: z.boolean(),
-    furSize: z.enum(furSizes),
-    name: z.string().trim().min(1),
-    race: z.string().trim().min(1),
-    size: z.enum(petSizes),
-    startTime: z.coerce.date()
-  })
-  .refine((data) => data.endTime > data.startTime, {
-    message: 'endTime must be after startTime',
-    path: ['endTime']
-  });
+const createAppointmentSchema = z.object({
+  animalType: z.string().trim().toUpperCase().pipe(z.enum(animalTypes)),
+  description: z.string().trim().min(1),
+  furIsTangled: z.boolean(),
+  furSize: z.enum(furSizes),
+  name: z.string().trim().min(1),
+  race: z.string().trim().min(1),
+  size: z.enum(petSizes),
+  startTime: z.coerce.date()
+});
 
 export default async (req: Request, res: Response) => {
-  const parsedBody = createAppointmentSchema.safeParse(req.body);
+  const parsedBody = createAppointmentSchema.safeParse(req.body); // esse safe
 
   if (!parsedBody.success) {
     return res.status(400).send({
@@ -44,5 +38,10 @@ export default async (req: Request, res: Response) => {
 
   await createAppointmentService(parsedBody.data);
 
-  return res.status(201).send({ message: 'Success', status: 201 });
+  return res
+    .status(201)
+    .send({
+      message: 'The appointment was created successfully.',
+      status: 201
+    });
 };

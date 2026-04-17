@@ -1,6 +1,7 @@
 import type { AppointmentRepository } from '../../domain/appointment-repository.js';
-import type { AppointmentCreation } from '../../domain/appointment-types.js';
+import type { AppointmentCreationReqType } from '../../domain/appointment-types.js';
 import logger from '../../lib/logger.js';
+import { addHours } from 'date-fns';
 
 const formatDate = (date: Date): string => {
   const day = String(date.getDate()).padStart(2, '0');
@@ -12,23 +13,48 @@ const formatDate = (date: Date): string => {
   return `${day}/${month}/${year} ${hours}:${minutes}`;
 };
 
+const checkIfDateAndTimeAreAvailable = async (
+  startTime: Date,
+  repository: AppointmentRepository
+): Promise<boolean> => {
+  const appointmentExists = await repository.findByStartTime(startTime);
+
+  return !appointmentExists.length;
+};
+
 export default (repository: AppointmentRepository) =>
-  async (appointment: AppointmentCreation) => {
+  async (appointment: AppointmentCreationReqType) => {
+    const newAppointment = {
+      ...appointment,
+      endTime: addHours(appointment.startTime, 1)
+    };
+
+    const isAvailable = await checkIfDateAndTimeAreAvailable(
+      newAppointment.startTime,
+      repository
+    );
+
+    if (!isAvailable) {
+      throw new Error(
+        'The selected date and time are not available for booking.'
+      );
+    }
+
     logger.info(
       `Creating appointment with data: ${JSON.stringify({
-        animalType: appointment.animalType,
-        description: appointment.description,
-        endTime: formatDate(appointment.endTime),
-        furIsTangled: appointment.furIsTangled,
-        furSize: appointment.furSize,
-        name: appointment.name,
-        race: appointment.race,
-        size: appointment.size,
-        startTime: formatDate(appointment.startTime)
+        animalType: newAppointment.animalType,
+        description: newAppointment.description,
+        endTime: formatDate(newAppointment.endTime),
+        furIsTangled: newAppointment.furIsTangled,
+        furSize: newAppointment.furSize,
+        name: newAppointment.name,
+        race: newAppointment.race,
+        size: newAppointment.size,
+        startTime: formatDate(newAppointment.startTime)
       })}`
     );
 
-    const createdAppointment = await repository.create(appointment);
+    const createdAppointment = await repository.create(newAppointment);
 
     return createdAppointment;
   };

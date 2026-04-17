@@ -6,10 +6,9 @@ export type AnimalType = (typeof animalTypes)[number];
 export type PetSize = (typeof petSizes)[number];
 export type FurSize = (typeof furSizes)[number];
 
-export type AppointmentCreation = {
+export type AppointmentCreationReqType = {
   animalType: AnimalType;
   description: string;
-  endTime: Date;
   furIsTangled: boolean;
   furSize: FurSize;
   name: string;
@@ -18,4 +17,8 @@ export type AppointmentCreation = {
   startTime: Date;
   updatedAt?: Date;
   createdAt?: Date;
+};
+
+export type AppointmentCreationType = AppointmentCreationReqType & {
+  endTime: Date;
 };
