@@ -5,6 +5,7 @@ import type {
   AppointmentCreationType,
   AppointmentCreationReqType
 } from '../../../../src/domain/appointment-types.js';
+import { addHours } from 'date-fns';
 
 describe('CreateAppointmentService', () => {
   beforeEach(() => {
@@ -13,19 +14,57 @@ describe('CreateAppointmentService', () => {
 
   it('should create an appointment successfully with expected end time', async () => {
     const appointmentData: AppointmentCreationReqType = {
-      animalType: 'DOG',
+      animalType: 'Cachorro',
       description: 'Banho e tosa higienica',
       startTime: new Date('2026-04-14T10:00:00.000Z'),
       furIsTangled: false,
-      furSize: 'MEDIUM',
+      furSize: 'Médio',
       name: 'Rex',
       race: 'Labrador',
-      size: 'LARGE'
+      size: 'Grande'
     };
 
     const appointmentCreationData: AppointmentCreationType = {
       ...appointmentData,
-      endTime: new Date('2026-04-14T11:00:00.000Z')
+      endTime: addHours(appointmentData.startTime, 1)
+    };
+
+    const mockResult = {
+      ...appointmentCreationData,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      id: crypto.randomUUID()
+    };
+
+    const repository: AppointmentRepository = {
+      // like sinon.stub() for repository
+      create: jest
+        .fn<AppointmentRepository['create']>() // create mock
+        .mockResolvedValue(mockResult),
+      findByStartTime: jest
+        .fn<AppointmentRepository['findByStartTime']>()
+        .mockResolvedValue([])
+    };
+
+    const createAppointmentService = CreateAppointmentService(repository);
+
+    const result = await createAppointmentService(appointmentData);
+
+    expect(repository.create).toHaveBeenCalledWith(appointmentCreationData);
+    expect(repository.create).toHaveBeenCalledTimes(1);
+    expect(result).toEqual(mockResult);
+  });
+
+  it('should throw an error if an appointment already exists at the same time', async () => {
+    const appointmentData: AppointmentCreationReqType = {
+      animalType: 'Gato',
+      description: 'Tosa higiênica',
+      startTime: new Date('2026-04-14T10:00:00.000Z'),
+      furIsTangled: true,
+      furSize: 'Curto',
+      name: 'Whiskers',
+      race: 'Labrador',
+      size: 'Grande'
     };
 
     const mockResult = {
@@ -37,21 +76,22 @@ describe('CreateAppointmentService', () => {
     };
 
     const repository: AppointmentRepository = {
-      // like sinon.stub() for repository
-      create: jest
-        .fn<AppointmentRepository['create']>() // repository mock
-        .mockResolvedValue(mockResult),
+      create: jest.fn<AppointmentRepository['create']>(),
       findByStartTime: jest
         .fn<AppointmentRepository['findByStartTime']>()
-        .mockResolvedValue([]) // simula que não há agendamento no mesmo horário
+        .mockResolvedValue([mockResult]) // simula que já existe um agendamento no mesmo horário
     };
 
     const createAppointmentService = CreateAppointmentService(repository);
 
-    const result = await createAppointmentService(appointmentData);
+    await expect(createAppointmentService(appointmentData)).rejects.toThrow(
+      'The selected date and time are not available for booking.'
+    );
 
-    expect(repository.create).toHaveBeenCalledWith(appointmentCreationData);
-    expect(repository.create).toHaveBeenCalledTimes(1);
-    expect(result).toEqual(mockResult);
+    expect(repository.findByStartTime).toHaveBeenCalledWith(
+      appointmentData.startTime
+    );
+    expect(repository.findByStartTime).toHaveBeenCalledTimes(1);
+    expect(repository.create).not.toHaveBeenCalled();
   });
 });

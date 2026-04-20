@@ -13,7 +13,7 @@ const createAppointmentService = CreateAppointmentService(
 );
 
 const createAppointmentSchema = z.object({
-  animalType: z.string().trim().toUpperCase().pipe(z.enum(animalTypes)),
+  animalType: z.string().trim().pipe(z.enum(animalTypes)),
   description: z.string().trim().min(1),
   furIsTangled: z.boolean(),
   furSize: z.enum(furSizes),
@@ -38,10 +38,8 @@ export default async (req: Request, res: Response) => {
 
   await createAppointmentService(parsedBody.data);
 
-  return res
-    .status(201)
-    .send({
-      message: 'The appointment was created successfully.',
-      status: 201
-    });
+  return res.status(201).send({
+    message: 'The appointment was created successfully.',
+    status: 201
+  });
 };

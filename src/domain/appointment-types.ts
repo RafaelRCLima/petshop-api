@@ -1,6 +1,6 @@
-export const animalTypes = ['DOG', 'CAT', 'BIRD'] as const;
-export const petSizes = ['SMALL', 'MEDIUM', 'LARGE'] as const;
-export const furSizes = ['SHORT', 'MEDIUM', 'LONG'] as const;
+export const animalTypes = ['Cachorro', 'Gato'] as const;
+export const petSizes = ['Pequeno', 'Médio', 'Grande'] as const;
+export const furSizes = ['Curto', 'Médio', 'Longo'] as const;
 
 export type AnimalType = (typeof animalTypes)[number];
 export type PetSize = (typeof petSizes)[number];

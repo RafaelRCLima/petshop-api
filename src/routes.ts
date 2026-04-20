@@ -3,6 +3,6 @@ import createAppointmentController from './app/controllers/create-appointment-co
 
 const routes = Router();
 
-routes.post('/create-appointment', createAppointmentController);
+routes.post('/appointments', createAppointmentController);
 
 export default routes;
