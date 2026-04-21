@@ -14,6 +14,7 @@ export type AppointmentCreationReqType = {
   name: string;
   race: string;
   size: PetSize;
+  service: string;
   startTime: Date;
   updatedAt?: Date;
   createdAt?: Date;
