@@ -20,7 +20,8 @@ const createAppointmentSchema = z.object({
   name: z.string().trim().min(1),
   race: z.string().trim().min(1),
   size: z.enum(petSizes),
-  startTime: z.coerce.date()
+  startTime: z.coerce.date(),
+  service: z.string().trim().min(1)
 });
 
 export default async (req: Request, res: Response) => {
