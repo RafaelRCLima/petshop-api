@@ -6,4 +6,6 @@ export interface AppointmentRepository {
   ): Promise<AppointmentCreationType>;
 
   findByStartTime(startTime: Date): Promise<AppointmentCreationType[]>;
+
+  search(query: any): Promise<AppointmentCreationType[]>;
 }
