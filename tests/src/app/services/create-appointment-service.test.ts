@@ -21,7 +21,8 @@ describe('CreateAppointmentService', () => {
       furSize: 'Médio',
       name: 'Rex',
       race: 'Labrador',
-      size: 'Grande'
+      size: 'Grande',
+      service: 'Tosa higiênica'
     };
 
     const appointmentCreationData: AppointmentCreationType = {
@@ -64,7 +65,8 @@ describe('CreateAppointmentService', () => {
       furSize: 'Curto',
       name: 'Whiskers',
       race: 'Labrador',
-      size: 'Grande'
+      size: 'Grande',
+      service: 'Tosa higiênica'
     };
 
     const mockResult = {

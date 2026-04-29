@@ -13,6 +13,7 @@ const appointmentRepository: AppointmentRepository = {
       name,
       race,
       size,
+      service,
       startTime
     } = appointment;
 
@@ -26,6 +27,7 @@ const appointmentRepository: AppointmentRepository = {
         name,
         race,
         size,
+        service,
         startTime,
         updatedAt: new Date(),
         createdAt: new Date()

@@ -50,6 +50,7 @@ export default (repository: AppointmentRepository) =>
         name: newAppointment.name,
         race: newAppointment.race,
         size: newAppointment.size,
+        service: newAppointment.service,
         startTime: formatDate(newAppointment.startTime)
       })}`
     );
