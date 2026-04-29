@@ -1,8 +1,13 @@
 import { Router, type Request, type Response } from 'express';
-import createAppointmentController from './app/controllers/create-appointment-controller.js';
+import {
+  CreateAppointmentController,
+  SearchAppointmentsController
+} from './app/controllers/index.js';
 
 const routes = Router();
 
-routes.post('/appointments', createAppointmentController);
+routes
+  .post('/appointments', CreateAppointmentController)
+  .get('/appointments/:limit/:page', SearchAppointmentsController);
 
 export default routes;

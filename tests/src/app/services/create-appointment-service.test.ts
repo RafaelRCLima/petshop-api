@@ -44,7 +44,8 @@ describe('CreateAppointmentService', () => {
         .mockResolvedValue(mockResult),
       findByStartTime: jest
         .fn<AppointmentRepository['findByStartTime']>()
-        .mockResolvedValue([])
+        .mockResolvedValue([]),
+      search: jest.fn<AppointmentRepository['search']>()
     };
 
     const createAppointmentService = CreateAppointmentService(repository);
@@ -81,7 +82,8 @@ describe('CreateAppointmentService', () => {
       create: jest.fn<AppointmentRepository['create']>(),
       findByStartTime: jest
         .fn<AppointmentRepository['findByStartTime']>()
-        .mockResolvedValue([mockResult]) // simula que já existe um agendamento no mesmo horário
+        .mockResolvedValue([mockResult]),
+      search: jest.fn<AppointmentRepository['search']>()
     };
 
     const createAppointmentService = CreateAppointmentService(repository);

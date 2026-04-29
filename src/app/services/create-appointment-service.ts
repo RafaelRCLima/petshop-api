@@ -1,25 +1,15 @@
 import type { AppointmentRepository } from '../../domain/appointment-repository.js';
 import type { AppointmentCreationReqType } from '../../domain/appointment-types.js';
 import logger from '../../lib/logger.js';
-import { addHours } from 'date-fns';
-
-const formatDate = (date: Date): string => {
-  const day = String(date.getDate()).padStart(2, '0');
-  const month = String(date.getMonth() + 1).padStart(2, '0');
-  const year = String(date.getFullYear()).slice(-2);
-  const hours = String(date.getHours()).padStart(2, '0');
-  const minutes = String(date.getMinutes()).padStart(2, '0');
-
-  return `${day}/${month}/${year} ${hours}:${minutes}`;
-};
+import { addHours, format } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 
 const checkIfDateAndTimeAreAvailable = async (
   startTime: Date,
   repository: AppointmentRepository
 ): Promise<boolean> => {
   const appointmentExists = await repository.findByStartTime(startTime);
-
-  return !appointmentExists.length;
+  return !appointmentExists;
 };
 
 export default (repository: AppointmentRepository) =>
@@ -44,14 +34,18 @@ export default (repository: AppointmentRepository) =>
       `Creating appointment with data: ${JSON.stringify({
         animalType: newAppointment.animalType,
         description: newAppointment.description,
-        endTime: formatDate(newAppointment.endTime),
+        endTime: format(newAppointment.endTime, 'dd/MM/yyyy HH:mm', {
+          locale: ptBR
+        }),
         furIsTangled: newAppointment.furIsTangled,
         furSize: newAppointment.furSize,
         name: newAppointment.name,
         race: newAppointment.race,
         size: newAppointment.size,
         service: newAppointment.service,
-        startTime: formatDate(newAppointment.startTime)
+        startTime: format(newAppointment.startTime, 'dd/MM/yyyy HH:mm', {
+          locale: ptBR
+        })
       })}`
     );
 
