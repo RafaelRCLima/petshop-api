@@ -7,7 +7,12 @@ export default async (req: Request, res: Response) => {
     appointmentsRepository
   );
 
-  const appointments = await searchAppointmentService(req.query);
+  const { limit, page } = req.params;
+
+  const appointments = await searchAppointmentService({
+    rowsPerPage: Number(limit),
+    page: Number(page)
+  });
 
   return res.status(200).send({
     message: 'Appointments retrieved successfully.',

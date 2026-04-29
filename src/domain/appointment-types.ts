@@ -18,3 +18,8 @@ export type AppointmentCreationType = AppointmentCreationReqType & {
   createdAt?: Date;
   updatedAt?: Date;
 };
+
+export type AppointmentSearchType = {
+  appointments: AppointmentCreationType[];
+  totalAppointments: number;
+};

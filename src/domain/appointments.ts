@@ -1,6 +1,9 @@
 import db from '../lib/db.js';
 import type { AppointmentRepository } from './appointment-repository.js';
-import type { AppointmentCreationType } from './appointment-types.js';
+import type {
+  AppointmentCreationType,
+  AppointmentSearchType
+} from './appointment-types.js';
 
 const appointmentRepository: AppointmentRepository = {
   async create(
@@ -48,13 +51,20 @@ const appointmentRepository: AppointmentRepository = {
     return result;
   },
 
-  async search(query: any): Promise<AppointmentCreationType[]> {
-    const { rowsPerPage = 10 } = query;
+  async search(query: any): Promise<AppointmentSearchType> {
+    const { rowsPerPage = 10, page = 1 } = query;
 
-    const result = await db.service.findMany({
-      take: rowsPerPage
+    const appointments = await db.service.findMany({
+      take: rowsPerPage,
+      skip: page * rowsPerPage,
+      orderBy: {
+        startTime: 'asc'
+      }
     });
-    return result;
+
+    const totalAppointments = await db.service.count();
+
+    return { appointments, totalAppointments };
   }
 };
 

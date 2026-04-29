@@ -8,6 +8,6 @@ const routes = Router();
 
 routes
   .post('/appointments', CreateAppointmentController)
-  .get('/appointments', SearchAppointmentsController);
+  .get('/appointments/:limit/:page', SearchAppointmentsController);
 
 export default routes;
