@@ -1,19 +1,11 @@
-export const animalTypes = ['Cachorro', 'Gato'] as const;
-export const petSizes = ['Pequeno', 'Médio', 'Grande'] as const;
-export const furSizes = ['Curto', 'Médio', 'Longo'] as const;
-
-export type AnimalType = (typeof animalTypes)[number];
-export type PetSize = (typeof petSizes)[number];
-export type FurSize = (typeof furSizes)[number];
-
 export type AppointmentCreationReqType = {
-  animalType: AnimalType;
+  animalType: string;
   description: string;
   furIsTangled: boolean;
-  furSize: FurSize;
+  furSize: string;
   name: string;
   race: string;
-  size: PetSize;
+  size: string;
   service: string;
   startTime: Date;
   updatedAt?: Date;
@@ -21,5 +13,13 @@ export type AppointmentCreationReqType = {
 };
 
 export type AppointmentCreationType = AppointmentCreationReqType & {
+  id?: string;
   endTime: Date;
+  createdAt?: Date;
+  updatedAt?: Date;
+};
+
+export type AppointmentSearchType = {
+  appointments: AppointmentCreationType[];
+  totalAppointments: number;
 };

@@ -1,11 +1,7 @@
 import { type Request, type Response } from 'express';
 import { z } from 'zod';
-import createAppointmentRepository from '../../domain/create-appointment.js';
-import {
-  animalTypes,
-  furSizes,
-  petSizes
-} from '../../domain/appointment-types.js';
+import createAppointmentRepository from '../../domain/appointments.js';
+
 import { CreateAppointmentService } from '../services/index.js';
 
 const createAppointmentService = CreateAppointmentService(
@@ -13,13 +9,13 @@ const createAppointmentService = CreateAppointmentService(
 );
 
 const createAppointmentSchema = z.object({
-  animalType: z.string().trim().pipe(z.enum(animalTypes)),
+  animalType: z.string().trim().min(1),
   description: z.string().trim().min(1),
   furIsTangled: z.boolean(),
-  furSize: z.enum(furSizes),
+  furSize: z.string().trim().min(1),
   name: z.string().trim().min(1),
   race: z.string().trim().min(1),
-  size: z.enum(petSizes),
+  size: z.string().trim().min(1),
   startTime: z.coerce.date(),
   service: z.string().trim().min(1)
 });
